@@ -17,7 +17,7 @@ my $build = Module::Build->new(
         'Data::Dumper'     => '0',
         'IO::Socket::INET' => '0',
         'IO::Socket::UNIX' => '0',
-        'App::Cmd'   => '0'
+        'CLI::Framework'   => '0'
     },
 );
 
