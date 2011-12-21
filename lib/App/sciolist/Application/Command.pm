@@ -1,5 +1,5 @@
 package App::sciolist::Application::Command;
-use App::Cmd::Setup -command;
+use base qw[ CLI::Framework::Command ];
 
 sub opt_spec {
     my ( $class, $app ) = @_;
