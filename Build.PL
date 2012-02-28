@@ -13,7 +13,7 @@ my $build = Module::Build->new(
     configure_requires   => { 'Module::Build' => '0', },
     build_requires       => { 'Test::More' => '0', },
     requires             => {
-	'Dancer' => '0',
+        'Dancer' => '0',
         'Data::Dumper'     => '0',
         'IO::Socket::INET' => '0',
         'IO::Socket::UNIX' => '0',
