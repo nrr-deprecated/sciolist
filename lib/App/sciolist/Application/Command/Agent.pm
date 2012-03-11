@@ -1,5 +1,5 @@
 package App::sciolist::Application::Command::Agent;
-use common::sense;
+use Modern::Perl;
 
 sub option_spec {
 }

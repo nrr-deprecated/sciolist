@@ -1,6 +1,6 @@
 package App::sciolist::Application::Command::Key;
 use base qw[ App::sciolist::Application::Command ];
-use common::sense;
+use Modern::Perl;
 
 sub notify_of_subcommand_dispatch {
 }

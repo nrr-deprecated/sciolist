@@ -1,6 +1,6 @@
 package App::sciolist::Application;
 use base qw[ CLI::Framework::Application ];
-use common::sense;
+use Modern::Perl;
 
 sub command_alias {
 }
