@@ -1,19 +1,28 @@
-App::sciolist - Multi-backend password/key management utility
+# App::sciolist
 
-Configuration is stored in a SQLite database in $HOME.
+A multi-backend password/key management utility half-inspired by Plan 9's `factotum` and `secstore`
 
-sciolist agent ?FLAGS?
-         agent -s
-         agent -c
+Configuration is stored in a SQLite database at `~/.sciolist/config`.
 
-sciolist key ?FLAGS?
-         key add --protocol=PROTOCOL ?--key0=value0? ... ?--_private0=private_value0? ...
-         key create --protocol=PROTOCOL ?--key0=value0? ...
-         key deprecate --key0=value0
-         key fetch
-         key update
+	sciolist agent ?FLAGS?
+		 agent -s
+		 agent --bourne-shell
+		 agent -c
+		 agent --c-shell
 
-sciolist source ?FLAGS?
-         source add
-         source deprecate
-         source adjust-priority ?--raise? ?--lower?
+	sciolist key ?FLAGS?
+		 key add --class=CLASS ?--key0=value0? ... ?--+private0=private_value0? ...
+		 key create --class=CLASS ?--key0=value0? ...
+		 key deprecate --key0=value0
+		 key fetch
+		 key update
+
+	sciolist source ?FLAGS?
+		 source add --source=SOURCE ?--key0=value0? ...
+		 source deprecate --source=SOURCE
+		 source raise-priority --source=SOURCE
+		 source lower-priority --source=SOURCE
+
+	sciolist configuration ?FLAGS?
+		 configuration --global ?--key0=value0? ?--key1=value1? ...
+		 configuration --source=SOURCE ?--key0=value0? ...
