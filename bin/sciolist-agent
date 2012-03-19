@@ -7,6 +7,9 @@ use RPC::Serialized::Server::NetServer;
 use Try::Tiny;
 use UUID::Tiny;
 
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+
 exit sciolist_agent(@ARGV);
 
 sub __get_bourne_shell_global_syntax
@@ -45,7 +48,7 @@ sub print_environment
 
 sub sciolist_agent
 {
-	my $uuid = UUID_to_string(create_UUID(UUID_V3, 'App::sciolist'));
+	my $uuid = UUID_to_string(create_UUID());
 	my $socket = "/tmp/sciolist-agent.$uuid.sock";
 	print_environment($$, $socket, shell => 'bourne');
 	RPC::Serialized::Server::NetServer->new({
@@ -53,9 +56,10 @@ sub sciolist_agent
 			port => "$socket|unix",
 		},
 		rpc_serialized => {
-			handler_namespaces => [
-				'App::sciolist::Agent::RPC::Handler',
-			],
+			handler_namespaces => 'App::sciolist::Agent::RPC::Handler',
+			handlers => {
+				asdfuasdf => 'App::sciolist::Agent::RPC::Handler::Key::Add',
+			},
 		}
 	})->run;
 	return 1;
