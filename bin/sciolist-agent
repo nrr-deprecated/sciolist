@@ -14,6 +14,11 @@ sub sciolist_agent
 		net_server => {
 			port => '/tmp/sciolist-agent.sock|unix',
 		},
+		rpc_serialized => {
+			handler_namespaces => [
+				'App::sciolist::RPC::Handler',
+			],
+		}
 	})->run;
 	return 1;
 }
