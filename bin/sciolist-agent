@@ -57,9 +57,6 @@ sub sciolist_agent
 		},
 		rpc_serialized => {
 			handler_namespaces => 'App::sciolist::Agent::RPC::Handler',
-			handlers => {
-				asdfuasdf => 'App::sciolist::Agent::RPC::Handler::Key::Add',
-			},
 		}
 	})->run;
 	return 1;
