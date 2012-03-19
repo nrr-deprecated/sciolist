@@ -1,0 +1,14 @@
+#! /usr/bin/env perl
+
+use strictures;
+
+use RPC::Serialized;
+use Try::Tiny;
+use UUID::Tiny;
+
+exit sciolist_agent(@ARGV);
+
+sub sciolist_agent
+{
+	return 1;
+}
