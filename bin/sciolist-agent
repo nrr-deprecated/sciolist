@@ -1,5 +1,6 @@
 #! /usr/bin/env perl
 
+use feature qw[ say ];
 use strictures;
 
 use RPC::Serialized::Server::NetServer;
@@ -8,11 +9,48 @@ use UUID::Tiny;
 
 exit sciolist_agent(@ARGV);
 
+sub __get_bourne_shell_global_syntax
+{
+	my ($key, $value) = @_;
+
+	return "$key=\"$value\" ; export $key"
+}
+
+sub __get_c_shell_global_syntax
+{
+	my ($key, $value) = @_;
+
+	return "setenv $key \"$value\"";
+}
+
+sub print_environment
+{
+	my ($pid, $socket, %options) = @_;
+	return unless $options{shell};
+
+	my %environment = (
+		SCIOLIST_PID => $pid,
+		SCIOLIST_RPC_SOCKET => $socket,
+	);
+
+	for my $key (keys %environment) {
+		if ($options{shell} eq 'bourne') {
+			say __get_bourne_shell_global_syntax($key, $environment{$key});
+		}
+		elsif ($options{shell} eq 'c') {
+			say __get_c_shell_global_syntax($key, $environment{$key});
+		}
+	}
+}
+
 sub sciolist_agent
 {
+	my $uuid = UUID_to_string(create_UUID(UUID_V3, 'App::sciolist'));
+	my $socket = "/tmp/sciolist-agent.$uuid.sock";
+	print_environment($$, $socket, shell => 'bourne');
 	RPC::Serialized::Server::NetServer->new({
 		net_server => {
-			port => '/tmp/sciolist-agent.sock|unix',
+			port => "$socket|unix",
 		},
 		rpc_serialized => {
 			handler_namespaces => [
