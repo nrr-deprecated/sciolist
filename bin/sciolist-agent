@@ -2,7 +2,7 @@
 
 use strictures;
 
-use RPC::Serialized;
+use RPC::Serialized::Server::NetServer;
 use Try::Tiny;
 use UUID::Tiny;
 
@@ -10,5 +10,10 @@ exit sciolist_agent(@ARGV);
 
 sub sciolist_agent
 {
+	RPC::Serialized::Server::NetServer->new({
+		net_server => {
+			port => '/tmp/sciolist-agent.sock|unix',
+		},
+	})->run;
 	return 1;
 }
