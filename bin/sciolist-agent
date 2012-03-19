@@ -54,7 +54,7 @@ sub sciolist_agent
 		},
 		rpc_serialized => {
 			handler_namespaces => [
-				'App::sciolist::RPC::Handler',
+				'App::sciolist::Agent::RPC::Handler',
 			],
 		}
 	})->run;
