@@ -28,13 +28,10 @@ sub __get_c_shell_global_syntax
 
 sub print_environment
 {
-	my ($pid, $socket, %options) = @_;
+	my ($environment_href, %options) = @_;
 	return unless $options{shell};
 
-	my %environment = (
-		SCIOLIST_PID => $pid,
-		SCIOLIST_RPC_SOCKET => $socket,
-	);
+	my %environment = %{$environment_href};
 
 	for my $key (keys %environment) {
 		if ($options{shell} eq 'c') {
@@ -50,7 +47,11 @@ sub sciolist_agent
 {
 	my $uuid = UUID_to_string(create_UUID());
 	my $socket = "/tmp/sciolist-agent.$uuid.sock";
-	print_environment($$, $socket, shell => 'bourne');
+	my %environment = (
+		SCIOLIST_PID => $$,
+		SCIOLIST_RPC_SOCKET => $socket,
+	);
+	print_environment(\%environment, shell => 'bourne');
 	RPC::Serialized::Server::NetServer->new({
 		net_server => {
 			port => "$socket|unix",
