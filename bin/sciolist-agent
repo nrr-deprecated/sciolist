@@ -3,6 +3,10 @@
 use feature qw[ say ];
 use strictures;
 
+use Config::Any;
+use Config::Find;
+use File::Basename;
+use IO::All;
 use RPC::Serialized::Server::NetServer;
 use Try::Tiny;
 use UUID::Tiny;
@@ -11,6 +15,12 @@ use FindBin;
 use lib "$FindBin::Bin/../lib";
 
 exit sciolist_agent(@ARGV);
+
+sub __infer_shell_from_context
+{
+	return 'c' if $ENV{SHELL} =~ /csh/;
+	return 'bourne';
+}
 
 sub __get_bourne_shell_global_syntax
 {
@@ -29,7 +39,7 @@ sub __get_c_shell_global_syntax
 sub print_environment
 {
 	my ($environment_href, %options) = @_;
-	return unless $options{shell};
+	die unless $options{shell};
 
 	my %environment = %{$environment_href};
 
@@ -47,11 +57,12 @@ sub sciolist_agent
 {
 	my $uuid = UUID_to_string(create_UUID());
 	my $socket = "/tmp/sciolist-agent.$uuid.sock";
+	my $shell = __infer_shell_from_context();
 	my %environment = (
 		SCIOLIST_PID => $$,
 		SCIOLIST_RPC_SOCKET => $socket,
 	);
-	print_environment(\%environment, shell => 'bourne');
+	print_environment(\%environment, shell => $shell);
 	RPC::Serialized::Server::NetServer->new({
 		net_server => {
 			port => "$socket|unix",
