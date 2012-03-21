@@ -7,6 +7,10 @@ use FindBin;
 use lib "$FindBin::Bin/../lib";
 
 use Carp;
+use Config::Any;
+use Config::Find;
+use File::Basename;
+use IO::All;
 use RPC::Serialized::Client::UNIX;
 use Try::Tiny;
 
@@ -30,7 +34,7 @@ sub sciolist_key
 		say $json;
 	}
 	catch {
-		carp "$_"
+		croak "$_\n"
 	};
 
 	return 1;
