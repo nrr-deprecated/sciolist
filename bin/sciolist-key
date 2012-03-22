@@ -1,0 +1,37 @@
+#! /usr/bin/env perl
+
+use feature qw[ say ];
+use strictures;
+
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+
+use Carp;
+use RPC::Serialized::Client::UNIX;
+use Try::Tiny;
+
+exit sciolist_key(@ARGV);
+
+sub sciolist_key
+{
+	return -1 unless $ENV{SCIOLIST_RPC_SOCKET};
+	return -1 unless $ENV{SCIOLIST_PID};
+
+	my $c = RPC::Serialized::Client::UNIX->new({
+		io_socket_unix => {
+			Peer => $ENV{SCIOLIST_RPC_SOCKET},
+		},
+	});
+
+	try {
+		my $json = $c->key_add('memcached_backend',
+			'+my_password' => 'SOME THING HERE OKAY'
+		);
+		say $json;
+	}
+	catch {
+		carp "$_"
+	};
+
+	return 1;
+}
