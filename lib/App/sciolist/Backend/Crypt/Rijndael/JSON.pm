@@ -4,12 +4,14 @@ use strictures;
 use Moose;
 
 use Crypt::CBC;
+use Data::Serializer;
+use IO::All;
 use IO::File::Combinators;
 use Try::Tiny;
 
 =head1 NAME
 
-IO::File::Combinators - The great new IO::File::Combinators!
+App::sciolist::Backend::Crypt::Rijndael::JSON
 
 =head1 VERSION
 
@@ -35,8 +37,26 @@ Perhaps a little code snippet.
 
 =cut
 
+has 'serializer' => (
+	is => 'ro',
+);
+
+has 'filename' => (
+	is => 'rw',
+);
+
 sub BUILD
 {
+	my ($self) = @_;
+
+	$self->serializer(Data::Serializer->new(
+		serializer => 'JSON',
+		digester => 'SHA1',
+		cipher => 'Rijndael',
+		portable => 1,
+		encoding => 'b64',
+		compress => 1,
+	));
 }
 
 sub __scrub_hidden_keys
@@ -63,25 +83,26 @@ sub __scrub_hidden_keys
 
 sub __serialize
 {
+	my ($self) = @_;
 }
 
 sub __deserialize
 {
+	my ($self) = @_;
 }
 
 sub __load_all_keys
 {
+	my ($self) = @_;
+
+	return io($self->filename);
 }
 
 sub __store_all_keys
 {
-	my ($filename, $lines) = @_;
+	my ($self) = @_;
 
-	with_file_writer($filename => sub {
-		my ($fh) = @_;
-
-		$fh->print($lines);
-	});
+	return ($self->serialize > io($self->filename));
 }
 
 sub __instantiate_crypt_cbc
