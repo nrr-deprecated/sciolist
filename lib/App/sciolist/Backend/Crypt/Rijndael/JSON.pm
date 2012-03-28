@@ -104,16 +104,40 @@ sub __deserialize
 	));
 }
 
+sub __compile_match_regexes
+{
+	my ($self, $test_key_href) = @_;
+
+	my %compiled_regexes = ();
+
+	map {
+		$compiled_regexes{$_} = qr/$_/i;
+	} keys %{$test_key_href};
+
+	return \%compiled_regexes;
+}
+
+sub __does_key_match
+{
+	my ($self, $key_to_test_href, $test_key_href) = @_;
+
+	my %compiled_regexes = %{$self->__compile_match_regexes($test_key_href)};
+
+	my @booleans = map {
+		$key_to_test_href->{$_} =~ $compiled_regexes{$_};
+	} keys %compiled_regexes;
+
+	return reduce {
+		$a && $b
+	} 1, @booleans;
+};
+
 sub match_keys
 {
-	my ($self, $patterns_hashref) = @_;
-
-	my $f = sub {
-	};
+	my ($self, $test_key_href) = @_;
 
 	grep {
-		map {
-		} values %{$patterns_hashref};
+		$self->__does_key_match($test_key_href, $_);
 	} @{$self->keys};
 }
 
