@@ -45,6 +45,10 @@ has 'filename' => (
 	is => 'rw',
 );
 
+has 'keys' => (
+	is => 'rw',
+);
+
 sub BUILD
 {
 	my ($self) = @_;
@@ -84,49 +88,20 @@ sub __scrub_hidden_keys
 sub __serialize
 {
 	my ($self) = @_;
+
+	return $self->serializer->store(
+		$self->keys,
+		$self->filename
+	);
 }
 
 sub __deserialize
 {
 	my ($self) = @_;
-}
 
-sub __load_all_keys
-{
-	my ($self) = @_;
-
-	return io($self->filename);
-}
-
-sub __store_all_keys
-{
-	my ($self) = @_;
-
-	return ($self->serialize > io($self->filename));
-}
-
-sub __instantiate_crypt_cbc
-{
-        my ($self, $secret_key) = @_;
-
-        return Crypt::CBC->new(
-                '-key' => $secret_key,
-                '-cipher' => 'Rijndael'
-        );
-}
-
-sub __encrypt
-{
-	my ($self, $secret_key, $plaintext) = @_;
-
-	return _instantiate_crypt_cbc($secret_key)->encrypt($plaintext);
-}
-
-sub __decrypt
-{
-	my ($self, $secret_key, $ciphertext) = @_;
-
-	return _instantiate_crypt_cbc($secret_key)->decrypt($ciphertext);
+	$self->keys($self->serializer->retrieve(
+		$self->filename
+	));
 }
 
 sub match_keys
