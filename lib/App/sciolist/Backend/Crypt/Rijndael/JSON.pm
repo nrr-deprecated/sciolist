@@ -106,14 +106,24 @@ sub __deserialize
 
 sub match_keys
 {
-	my ($self, $patterns) = @_;
+	my ($self, $patterns_hashref) = @_;
+
+	my $f = sub {
+	};
+
+	grep {
+		map {
+		} values %{$patterns_hashref};
+	} @{$self->keys};
 }
 
 sub match_scrubbed_keys
 {
-	my ($self, $patterns) = @_;
+	my ($self, $patterns_hashref) = @_;
 
-	return $self->__scrub_hidden_keys($self->match_keys($patterns));
+	return $self->__scrub_hidden_keys(
+		$self->match_keys($patterns_hashref)
+	);
 }
 
 =head1 AUTHOR
