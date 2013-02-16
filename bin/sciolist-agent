@@ -1,5 +1,9 @@
 #! /usr/bin/env perl
 
+# PODNAME: sciolist-agent
+# ABSTRACT: Provide a long-running agent for keeping sciolist keystores resident in memory.
+# VERSION
+
 use feature qw[ say ];
 use strictures;
 

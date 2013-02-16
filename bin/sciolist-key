@@ -1,5 +1,9 @@
 #! /usr/bin/env perl
 
+# PODNAME: sciolist-key
+# ABSTRACT: Operate on keys stored within a sciolist keystore.
+# VERSION
+
 use feature qw[ say ];
 use strictures;
 
