@@ -7,10 +7,10 @@ sub command_alias {
 
 sub command_map {
     return (
-	'agent' => '',
-	'key' => '',
-	'source' => '',
-	);
+        'agent'  => '',
+        'key'    => '',
+        'source' => '',
+    );
 }
 
 sub init {

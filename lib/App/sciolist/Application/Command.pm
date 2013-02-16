@@ -3,8 +3,7 @@ use base qw[ CLI::Framework::Command ];
 
 sub opt_spec {
     my ( $class, $app ) = @_;
-    return ([ 'help' => "This usage screen" ],
-	    $class->options($app));
+    return ( [ 'help' => "This usage screen" ], $class->options($app) );
 }
 
 sub validate_args {

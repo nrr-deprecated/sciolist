@@ -21,7 +21,6 @@ Version 0.01
 
 our $VERSION = '0.01';
 
-
 =head1 SYNOPSIS
 
 Quick summary of what the module does.
@@ -37,117 +36,95 @@ Perhaps a little code snippet.
 
 =cut
 
-has 'serializer' => (
-	is => 'ro',
-);
+has 'serializer' => ( is => 'ro', );
 
-has 'filename' => (
-	is => 'rw',
-);
+has 'filename' => ( is => 'rw', );
 
-has 'keys' => (
-	is => 'rw',
-);
+has 'keys' => ( is => 'rw', );
 
-sub BUILD
-{
-	my ($self) = @_;
+sub BUILD {
+    my ($self) = @_;
 
-	$self->serializer(Data::Serializer->new(
-		serializer => 'JSON',
-		digester => 'SHA1',
-		cipher => 'Rijndael',
-		portable => 1,
-		encoding => 'b64',
-		compress => 1,
-	));
+    $self->serializer(
+        Data::Serializer->new(
+            serializer => 'JSON',
+            digester   => 'SHA1',
+            cipher     => 'Rijndael',
+            portable   => 1,
+            encoding   => 'b64',
+            compress   => 1,
+        )
+    );
 }
 
-sub __scrub_hidden_keys
-{
-	my ($elements_aref) = @_;
+sub __scrub_hidden_keys {
+    my ($elements_aref) = @_;
 
-	my @scrubbed_elements = map {
-		my $element = $_;
+    my @scrubbed_elements = map {
+        my $element = $_;
 
-		my %scrubbed_element = map {
-			my $key = $_;
-			($key => $element->{$key})
-		}
-		grep {
-			my $key = $_;
-			$key !~ /^\+/
-		} keys %{$element};
+        my %scrubbed_element = map {
+            my $key = $_;
+            ( $key => $element->{$key} )
+          }
+          grep {
+            my $key = $_;
+            $key !~ /^\+/
+          } keys %{$element};
 
-		\%scrubbed_element;
-	} @{$elements_aref};
+        \%scrubbed_element;
+    } @{$elements_aref};
 
-	return \@scrubbed_elements;
+    return \@scrubbed_elements;
 }
 
-sub __serialize
-{
-	my ($self) = @_;
+sub __serialize {
+    my ($self) = @_;
 
-	return $self->serializer->store(
-		$self->keys,
-		$self->filename
-	);
+    return $self->serializer->store( $self->keys, $self->filename );
 }
 
-sub __deserialize
-{
-	my ($self) = @_;
+sub __deserialize {
+    my ($self) = @_;
 
-	$self->keys($self->serializer->retrieve(
-		$self->filename
-	));
+    $self->keys( $self->serializer->retrieve( $self->filename ) );
 }
 
-sub __compile_match_regexes
-{
-	my ($self, $test_key_href) = @_;
+sub __compile_match_regexes {
+    my ( $self, $test_key_href ) = @_;
 
-	my %compiled_regexes = ();
+    my %compiled_regexes = ();
 
-	map {
-		$compiled_regexes{$_} = qr/$_/i;
-	} keys %{$test_key_href};
+    map { $compiled_regexes{$_} = qr/$_/i; } keys %{$test_key_href};
 
-	return \%compiled_regexes;
+    return \%compiled_regexes;
 }
 
-sub __does_key_match
-{
-	my ($self, $key_to_test_href, $test_key_href) = @_;
+sub __does_key_match {
+    my ( $self, $key_to_test_href, $test_key_href ) = @_;
 
-	my %compiled_regexes = %{$self->__compile_match_regexes($test_key_href)};
+    my %compiled_regexes = %{ $self->__compile_match_regexes($test_key_href) };
 
-	my @booleans = map {
-		$key_to_test_href->{$_} =~ $compiled_regexes{$_};
-	} keys %compiled_regexes;
+    my @booleans =
+      map { $key_to_test_href->{$_} =~ $compiled_regexes{$_}; }
+      keys %compiled_regexes;
 
-	return reduce {
-		$a && $b
-	} 1, @booleans;
-};
-
-sub match_keys
-{
-	my ($self, $test_key_href) = @_;
-
-	grep {
-		$self->__does_key_match($test_key_href, $_);
-	} @{$self->keys};
+    return reduce {
+        $a && $b;
+    }
+    1, @booleans;
 }
 
-sub match_scrubbed_keys
-{
-	my ($self, $patterns_hashref) = @_;
+sub match_keys {
+    my ( $self, $test_key_href ) = @_;
 
-	return $self->__scrub_hidden_keys(
-		$self->match_keys($patterns_hashref)
-	);
+    grep { $self->__does_key_match( $test_key_href, $_ ); } @{ $self->keys };
+}
+
+sub match_scrubbed_keys {
+    my ( $self, $patterns_hashref ) = @_;
+
+    return $self->__scrub_hidden_keys( $self->match_keys($patterns_hashref) );
 }
 
 =head1 AUTHOR
@@ -205,4 +182,4 @@ See http://dev.perl.org/licenses/ for more information.
 
 =cut
 
-__PACKAGE__->meta->make_immutable; # End of IO::File::Combinators
+__PACKAGE__->meta->make_immutable;    # End of IO::File::Combinators
