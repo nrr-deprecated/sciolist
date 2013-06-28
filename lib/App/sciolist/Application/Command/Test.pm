@@ -1,5 +1,5 @@
-package App::sciolist::Application::Command::Test;
-use base qw[ App::sciolist::Application::Command ];
+package Sciolist::Application::Command::Test;
+use base qw[ Sciolist::Application::Command ];
 use strictures;
 
 sub notify_of_subcommand_dispatch {

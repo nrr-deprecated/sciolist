@@ -1,4 +1,4 @@
-package App::sciolist::Application::Command;
+package Sciolist::Application::Command;
 use base qw[ CLI::Framework::Command ];
 
 sub opt_spec {

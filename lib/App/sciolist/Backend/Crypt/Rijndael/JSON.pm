@@ -1,4 +1,4 @@
-package App::sciolist::Backend::Crypt::Rijndael::JSON;
+package Sciolist::Backend::Crypt::Rijndael::JSON;
 
 use strictures;
 use Moose;
@@ -11,7 +11,7 @@ use Try::Tiny;
 
 =head1 NAME
 
-App::sciolist::Backend::Crypt::Rijndael::JSON
+Sciolist::Backend::Crypt::Rijndael::JSON
 
 =head1 VERSION
 

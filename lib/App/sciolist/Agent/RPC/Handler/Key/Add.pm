@@ -1,4 +1,4 @@
-package App::sciolist::Agent::RPC::Handler::Key::Add;
+package Sciolist::Agent::RPC::Handler::Key::Add;
 
 use feature qw[ say ];
 use strictures;

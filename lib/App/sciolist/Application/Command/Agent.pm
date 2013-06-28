@@ -1,4 +1,4 @@
-package App::sciolist::Application::Command::Agent;
+package Sciolist::Application::Command::Agent;
 use Modern::Perl;
 
 sub option_spec {

@@ -1,4 +1,4 @@
-package App::sciolist::Application;
+package Sciolist::Application;
 use base qw[ CLI::Framework::Application ];
 use Modern::Perl;
 

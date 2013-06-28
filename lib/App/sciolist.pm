@@ -1,4 +1,4 @@
-package App::sciolist;
+package Sciolist;
 
 use strictures;
 use 5.010;
@@ -9,7 +9,7 @@ __END__
 
 =head1 NAME
  
-App::sciolist - A multi-backend secret storage facility modeled loosely on and
+Sciolist - A multi-backend secret storage facility modeled loosely on and
 inspired vaguely by Plan 9's factotum and secstore servers.
  
 =head1 SYNOPSIS
