@@ -1,0 +1,16 @@
+#! /usr/bin/env bash
+SELF="s6t-create"
+
+is_subshell() {
+	if [ "`basename $1`" = "$SELF" ]
+	then
+		return 0
+	fi
+
+	return -1
+}
+
+s6t_create() {
+}
+
+is_subshell $0 && s6t_create "$@"

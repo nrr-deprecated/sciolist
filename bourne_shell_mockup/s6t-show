@@ -1,0 +1,57 @@
+#! /usr/bin/env bash
+SELF="s6t-show"
+
+is_subshell() {
+	if [ "`basename $1`" = "$SELF" ]
+	then
+		return 0
+	fi
+
+	return -1
+}
+
+show_usage() {
+	echo $0: usage: $0 [-ah] object
+}
+
+show_object() {
+	local show_all_p="$1"
+	local object="$2"
+	local show_command=""
+
+	if [ "$show_all_p" = "no" ]
+	then
+		show_command="$show_command | head -n 1"
+	fi
+}
+
+s6t_show() {
+	local original_wd="$PWD"
+	local show_all_p="no"
+
+	while getopts 'ah' opt
+	do
+		case $opt in
+		a)
+			show_all_p="yes"
+			;;
+		h)
+			show_usage
+			exit 0
+			;;
+		esac
+	done
+
+	shift $((OPTIND-1))
+
+	local object="$@"
+	if [ -z $object ]
+	then
+		show_usage
+		exit 110
+	fi
+
+	show_object "$show_all_p" "$object"
+}
+
+is_subshell $0 && s6t_show "$@"
