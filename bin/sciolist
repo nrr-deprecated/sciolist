@@ -1,8 +1,0 @@
-#!/usr/bin/env perl
-
-# PODNAME: sciolist
-# ABSTRACT: This is the primary frontend for sciolist.
-# VERSION
-
-use App::sciolist::Application;
-App::sciolist::Application->run;

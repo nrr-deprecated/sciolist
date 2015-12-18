@@ -1,8 +1,0 @@
-[Edit ,|perltidy] [perlcritic $%]
-
-find . -iname '*.pl' -print0 | xargs -0 -I% perl -c %
-find . -iname '*.pm' -print0 | xargs -0 -I% perl -c %
-
-dzil test
-dzil build
-dzil release
