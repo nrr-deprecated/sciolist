@@ -1,0 +1,28 @@
+#! /usr/bin/env bash
+
+set -u
+set -e
+set -o pipefail
+
+ssh_key=${1:-}
+sciolist_entry=${2:-}
+
+[ ! -z "$ssh_key" ] || exit 110
+[ -f "$ssh_key" ] || exit 110
+
+[ ! -z "$sciolist_entry" ] || exit 110
+[ -f "$sciolist_entry" ] || exit 110
+
+askpass_script=$(mktemp /tmp/sciolist-ssh-add-key.XXXXXX)
+chmod +x "$askpass_script"
+cat <<EOF >"$askpass_script"
+#! /usr/bin/env bash
+exec sciolist-get-password "$sciolist_entry"
+EOF
+
+exec \
+	env \
+	DISPLAY= \
+	SSH_ASKPASS="$askpass_script" \
+	ssh-add "$ssh_key" \
+	</dev/null &>/dev/null
