@@ -15,14 +15,14 @@ sciolist_entry=${2:-}
 
 askpass_script=$(mktemp /tmp/sciolist-ssh-add-key.XXXXXX)
 chmod +x "$askpass_script"
+
 cat <<EOF >"$askpass_script"
 #! /usr/bin/env bash
 exec sciolist-get-password "$sciolist_entry"
 EOF
 
-exec \
-	env \
-	DISPLAY= \
-	SSH_ASKPASS="$askpass_script" \
-	ssh-add "$ssh_key" \
-	</dev/null &>/dev/null
+env \
+DISPLAY= \
+SSH_ASKPASS="$askpass_script" \
+ssh-add "$ssh_key" \
+</dev/null &>/dev/null
